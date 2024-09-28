@@ -82,6 +82,17 @@ function displayCards(cards) {
             cardElement.style.opacity = '1';
             cardElement.style.transition = 'opacity 0.5s ease-in-out';
         }, 100);
+
+        // Add click event listener to zoom in card
+        cardElement.addEventListener('click', function () {
+            if (cardElement.classList.contains('zoomed')) {
+                // If the card is already zoomed, close it
+                closeZoom();
+            } else {
+                // Zoom in the card
+                zoomCard(cardElement);
+            }
+        });
     });
 }
 
@@ -114,3 +125,31 @@ themeToggleButton.addEventListener('click', function () {
     console.log('Theme changed:', isDarkTheme ? 'Dark Mode' : 'Light Mode');
 });
 
+// Function to zoom in a card
+function zoomCard(cardElement) {
+    // Set all other cards to blurred
+    document.querySelectorAll('.card').forEach(card => {
+        if (card !== cardElement) {
+            card.classList.add('blurred');
+        }
+    });
+
+    // Set the selected card to zoomed
+    cardElement.classList.add('zoomed');
+}
+
+// Function to close zoomed card
+function closeZoom() {
+    // Remove blurred and zoomed classes from all cards
+    document.querySelectorAll('.card').forEach(card => {
+        card.classList.remove('blurred');
+        card.classList.remove('zoomed');
+    });
+}
+
+// Event listener to close zoomed card when clicking outside
+document.addEventListener('click', function (event) {
+    if (!event.target.classList.contains('card') && document.querySelector('.zoomed')) {
+        closeZoom();
+    }
+});
